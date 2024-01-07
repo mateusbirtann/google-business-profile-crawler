@@ -1,4 +1,3 @@
-// src/gateways/dataScraper.ts
 import * as cheerio from "cheerio";
 import { Business } from "../entities/Business";
 import { Page } from "puppeteer";

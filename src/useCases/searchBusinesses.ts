@@ -1,4 +1,4 @@
-import { getBusinessData } from '../gateways/getBusinessData';
+import { getBusinessData } from '../services/getBusinessData';
 
 export async function searchBusinesses() {
   const start = Date.now();
