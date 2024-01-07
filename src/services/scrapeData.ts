@@ -2,6 +2,9 @@ import * as cheerio from "cheerio";
 import { Business } from "../entities/Business";
 import { Page } from "puppeteer";
 import { autoScroll } from "../helpers/autoscroll";
+import { PrismaClient, GoogleBusinessProfile } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export async function scrapeData(page: Page, browser: any) {
   try {
@@ -11,16 +14,43 @@ export async function scrapeData(page: Page, browser: any) {
     const parents = getParentsFromATags(html);
     // console.log("parents", parents.length);
     const business: Business[] = getBusinessesFromParents(parents);
-    console.log(business[0])
 
-    // Create Business
-    // for (const biz of business) {
-    //   await createBusiness(biz);
-    // }
+    let count = 0;
+
+    for (const biz of business) {
+      const created = await createBusiness(biz);
+      if (created) count++; // incrementa o contador se o negócio foi criado com sucesso
+    }
+
+    console.log(`${count} businesses were saved.`);
 
     return business;
   } catch (error) {
     console.log("error at googleMaps", (error as Error).message);
+  }
+}
+
+async function createBusiness(biz: Business) {
+  const { placeId, address, category, phone, googleUrl, bizWebsite, storeName, ratingText, stars, numberOfReviews } = biz;
+  try {
+    await prisma.googleBusinessProfile.create({
+      data: {
+        placeId,
+        address,
+        category,
+        phone,
+        googleUrl,
+        bizWebsite,
+        storeName,
+        ratingText,
+        stars,
+        numberOfReviews
+      }
+    });
+    return true
+  }
+  catch (error) {
+    console.log("error at createBusiness", (error as Error).message);
   }
 }
 

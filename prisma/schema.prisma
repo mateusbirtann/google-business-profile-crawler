@@ -3,24 +3,20 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
 model GoogleBusinessProfile {
-  placeId         String  @unique
-  address         String? @db.MediumText
-  category        String? @db.MediumText
-  phone           String? @db.MediumText
-  googleUrl       String? @db.MediumText
-  bizWebsite      String? @db.MediumText
-  storeName       String? @db.MediumText
-  ratingText      String? @db.MediumText
-  stars           String? @db.MediumText
-  numberOfReviews String? @db.MediumText
-
-  userId String?
-
-  @@index([userId])
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  placeId         String? @unique
+  address         String?
+  category        String?
+  phone           String?
+  googleUrl       String?
+  bizWebsite      String?
+  storeName       String?
+  ratingText      String?
+  stars           Int?
+  numberOfReviews Int?
 }

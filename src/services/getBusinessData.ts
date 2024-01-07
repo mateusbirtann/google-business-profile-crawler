@@ -8,7 +8,6 @@ export async function getBusinessData() {
   const browser = await initializeBrowser();
   const page = await browser.newPage();
   await navigateToGoogleMaps(page, query);
-  const scrapedData = await scrapeData(page, browser);
-  const business = scrapedData
+  const business = await scrapeData(page, browser);
   return business;
 }
