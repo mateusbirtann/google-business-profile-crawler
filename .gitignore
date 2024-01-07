@@ -1,0 +1,18 @@
+# Node.js dependencies
+node_modules
+
+# Prisma
+.prisma/client
+prisma/dev.db
+prisma/migrations
+
+# Build output
+dist
+
+# Environment variables
+.env
+
+# IDE files
+.vscode
+*.iml
+.idea

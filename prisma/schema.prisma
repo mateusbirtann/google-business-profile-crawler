@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model GoogleBusinessProfile {
+  placeId         String  @unique
+  address         String? @db.MediumText
+  category        String? @db.MediumText
+  phone           String? @db.MediumText
+  googleUrl       String? @db.MediumText
+  bizWebsite      String? @db.MediumText
+  storeName       String? @db.MediumText
+  ratingText      String? @db.MediumText
+  stars           String? @db.MediumText
+  numberOfReviews String? @db.MediumText
+
+  userId String?
+
+  @@index([userId])
+}
