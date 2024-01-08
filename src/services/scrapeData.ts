@@ -2,7 +2,7 @@ import * as cheerio from "cheerio";
 import { Business } from "../entities/Business";
 import { Page } from "puppeteer";
 import { autoScroll } from "../helpers/autoscroll";
-import { PrismaClient, GoogleBusinessProfile } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -15,12 +15,9 @@ export async function scrapeData(page: Page, browser: any) {
     // console.log("parents", parents.length);
     const business: Business[] = getBusinessesFromParents(parents);
 
-    let count = 0;
-
-    for (const biz of business) {
-      const created = await createBusiness(biz);
-      if (created) count++;
-    }
+    const createBusinessPromises = business.map(biz => createBusiness(biz));
+    const createdBusinesses = await Promise.all(createBusinessPromises);
+    const count = createdBusinesses.filter(Boolean).length;
 
     console.log(`${count} businesses were saved.`);
 
