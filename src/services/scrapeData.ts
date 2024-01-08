@@ -19,7 +19,7 @@ export async function scrapeData(page: Page, browser: any) {
 
     for (const biz of business) {
       const created = await createBusiness(biz);
-      if (created) count++; // incrementa o contador se o negócio foi criado com sucesso
+      if (created) count++;
     }
 
     console.log(`${count} businesses were saved.`);
@@ -112,15 +112,15 @@ function getBusinessesFromParents(parents: any[]) {
       bizWebsite: website,
       storeName,
       ratingText,
-      stars: ratingText?.split("stars")?.[0]?.trim()
-        ? Number(ratingText?.split("stars")?.[0]?.trim())
+      stars: ratingText?.split("estrelas")?.[0]?.trim().replace(',', '.')
+        ? Number(ratingText?.split("estrelas")?.[0]?.trim().replace(',', '.'))
         : null,
       numberOfReviews: ratingText
-        ?.split("stars")?.[1]
-        ?.replace("Reviews", "")
+        ?.split("estrelas")?.[1]
+        ?.replace("comentários", "")
         ?.trim()
         ? Number(
-          ratingText?.split("stars")?.[1]?.replace("Reviews", "")?.trim()
+          ratingText?.split("estrelas")?.[1]?.replace("comentários", "")?.trim()
         )
         : null,
     });
