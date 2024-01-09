@@ -7,7 +7,7 @@ export async function autoScroll(page: Page) {
     await new Promise<void>((resolve, reject) => {
       var totalHeight = 0;
       var distance = 1000;
-      var scrollDelay = 1000;
+      var scrollDelay = 2000;
 
       var timer = setInterval(async () => {
         if (wrapper) {
@@ -32,7 +32,7 @@ export async function autoScroll(page: Page) {
             }
           }
         }
-      }, 100);
+      }, 200);
     });
   });
 }

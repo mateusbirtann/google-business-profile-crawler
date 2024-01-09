@@ -29,13 +29,16 @@ export async function scrapeData(page: Page, browser: any) {
 
 async function createBusiness(biz: Business) {
   const { placeId, address, category, phone, googleUrl, bizWebsite, storeName, ratingText, stars, numberOfReviews } = biz;
+
+  const formattedPhone = formatPhone(phone);
+
   try {
     await prisma.googleBusinessProfile.create({
       data: {
         placeId,
         address,
         category,
-        phone,
+        phone: formattedPhone,
         googleUrl,
         bizWebsite,
         storeName,
@@ -49,6 +52,17 @@ async function createBusiness(biz: Business) {
   catch (error) {
     console.log("error at createBusiness", (error as Error).message);
   }
+}
+
+function formatPhone(phone: string | null): string | null {
+  if (phone) {
+    let formattedPhone = phone.replace(/\D/g, '');
+    if (formattedPhone.length !== 11) {
+      return null;
+    }
+    return formattedPhone;
+  }
+  return null;
 }
 
 async function closeBrowser(browser: any) {
