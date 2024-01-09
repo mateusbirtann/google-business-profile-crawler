@@ -1,12 +1,12 @@
 import * as cheerio from "cheerio";
 import { Business } from "../entities/Business";
-import { Page } from "puppeteer";
+import { Page, Browser } from "puppeteer";
 import { autoScroll } from "../helpers/autoscroll";
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function scrapeData(page: Page, browser: any) {
+export async function scrapeData(page: Page, browser: Browser) {
   try {
     await autoScroll(page);
     const html = await page.content();
@@ -50,7 +50,11 @@ async function createBusiness(biz: Business) {
     return true
   }
   catch (error) {
-    console.log("error at createBusiness", (error as Error).message);
+    if ((error as Prisma.PrismaClientKnownRequestError).code === 'P2002') {
+      console.log(`error at createBusiness: A business with placeId ${placeId} already exists.`);
+    } else {
+      console.log("error at createBusiness", (error as Error).message);
+    }
   }
 }
 
